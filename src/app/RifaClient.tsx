@@ -111,15 +111,18 @@ type Props = {
 
 export default function RifaClient({ reservedList, names }: Props) {
   const reserved = new Set(reservedList);
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
+    const tick = () => setNow(Date.now());
+    tick();
+    const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
 
   const deadline = getAprilFiveDeadline();
-  const remaining = formatRemaining(deadline.getTime() - now);
+  const remaining =
+    now === null ? null : formatRemaining(deadline.getTime() - now);
 
   return (
     <div className="relative min-h-screen overflow-hidden text-[var(--foreground)]">
@@ -165,6 +168,7 @@ export default function RifaClient({ reservedList, names }: Props) {
                 <span
                   className="font-medium"
                   style={{ color: "var(--c-kadestin)" }}
+                  suppressHydrationWarning
                 >
                   {deadline.toLocaleDateString("es", {
                     day: "numeric",
@@ -175,7 +179,37 @@ export default function RifaClient({ reservedList, names }: Props) {
               </p>
             </div>
 
-            {remaining.done ? (
+            {remaining === null ? (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+                {["Días", "Horas", "Minutos", "Segundos"].map((label) => (
+                  <div
+                    key={label}
+                    className="group relative overflow-hidden border px-2 py-4 text-center shadow-[0_4px_20px_-8px_rgba(30,47,61,0.12)] sm:px-3 sm:py-5"
+                    style={{
+                      borderColor: "rgba(58, 141, 146, 0.4)",
+                      backgroundColor: "rgba(255,255,255,0.88)",
+                    }}
+                  >
+                    <div
+                      className="absolute inset-x-0 top-0 h-1.5 opacity-100"
+                      style={{ backgroundColor: "var(--c-kadestin)" }}
+                    />
+                    <div
+                      className="font-mono text-2xl font-bold tabular-nums tracking-tight sm:text-[1.75rem]"
+                      style={{ color: "var(--c-old-leaf)" }}
+                    >
+                      —
+                    </div>
+                    <div
+                      className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.12em]"
+                      style={{ color: "var(--c-kadestin)" }}
+                    >
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : remaining.done ? (
               <p
                 className="text-center font-display text-2xl font-semibold sm:text-3xl"
                 style={{ color: "var(--c-mendung-deep)" }}
