@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Rifa Solidaria Marita",
-  description: "Grilla de números, compradores y cuenta regresiva.",
+  description: "Gracias por el apoyo.",
 };
 
 export default function RootLayout({
