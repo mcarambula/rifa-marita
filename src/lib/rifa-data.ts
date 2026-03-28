@@ -2,6 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 
 export type RifaJson = {
+  /** @deprecated Ignorado: los reservados se deducen de las claves de `buyers`. */
   reserved?: unknown;
   buyers?: unknown;
   names?: unknown;
@@ -29,15 +30,6 @@ export function parseRifaJson(raw: string): RifaState {
     return { reserved: new Set(), names: Array.from({ length: 100 }, () => "") };
   }
 
-  const reserved = new Set<number>();
-  if (Array.isArray(data.reserved)) {
-    for (const x of data.reserved) {
-      if (typeof x === "number" && Number.isInteger(x) && x >= 0 && x < 100) {
-        reserved.add(x);
-      }
-    }
-  }
-
   const names = Array.from({ length: 100 }, () => "");
 
   if (Array.isArray(data.names)) {
@@ -47,11 +39,13 @@ export function parseRifaJson(raw: string): RifaState {
     }
   }
 
+  const reserved = new Set<number>();
   if (isRecord(data.buyers)) {
     for (const [k, v] of Object.entries(data.buyers)) {
       const n = Number.parseInt(k, 10);
       if (!Number.isNaN(n) && n >= 0 && n < 100 && typeof v === "string") {
         names[n] = v;
+        reserved.add(n);
       }
     }
   }
