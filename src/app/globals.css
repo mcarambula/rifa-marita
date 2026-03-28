@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/*
+  Palette inspired by Colorista reference:
+  Blue Kadestin (teal) · Old Leaf (navy) · Maroona (gold) · Mendung Parah (pale sky) · Mendung (orange)
+*/
+:root {
+  --c-kadestin: #3a8d92;
+  --c-kadestin-muted: #5aa3a8;
+  --c-kadestin-soft: rgba(58, 141, 146, 0.12);
+  --c-old-leaf: #1e2f3d;
+  --c-old-leaf-muted: #3d5366;
+  --c-maroona: #e8bc3b;
+  --c-maroona-soft: #f5d78a;
+  --c-mendung-parah: #c5e4ef;
+  --c-mendung-parah-light: #e8f4fa;
+  --c-mendung-parah-faint: #f2f9fc;
+  --c-mendung: #e9722e;
+  --c-mendung-deep: #c85f1e;
+  --background: #eef5f9;
+  --foreground: var(--c-old-leaf);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+}
+
+.rifa-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
