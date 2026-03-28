@@ -1,6 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
+
+function rifaNumberStyle(isReserved: boolean): CSSProperties {
+  return isReserved
+    ? {
+        backgroundColor: "var(--c-mendung)",
+        color: "#fff",
+        boxShadow: "0 4px 12px -4px rgba(200, 95, 30, 0.4)",
+        border: "1px solid var(--c-mendung-deep)",
+      }
+    : {
+        backgroundColor: "var(--c-mendung-parah-light)",
+        color: "var(--c-kadestin)",
+        border: "1px solid var(--c-kadestin-muted)",
+      };
+}
+
+function rifaListRowChrome(isReserved: boolean): CSSProperties {
+  return isReserved
+    ? {
+        borderColor: "var(--c-mendung-deep)",
+        backgroundColor: "rgba(255, 255, 255, 0.92)",
+        boxShadow:
+          "0 4px 16px -10px rgba(30, 47, 61, 0.12), 0 0 0 1px rgba(200, 95, 30, 0.12)",
+      }
+    : {
+        borderColor: "var(--c-kadestin-muted)",
+        backgroundColor: "var(--c-mendung-parah-light)",
+        boxShadow: "0 4px 16px -10px rgba(30, 47, 61, 0.12)",
+      };
+}
 
 function pad2(n: number) {
   return n.toString().padStart(2, "0");
@@ -195,43 +225,6 @@ export default function RifaClient({ reservedList, names }: Props) {
           <h2 className="font-display text-lg font-semibold text-[var(--c-old-leaf)] sm:text-xl">
             Números
           </h2>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-lg sm:text-sm">
-            <span
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm"
-              style={{
-                borderColor: "var(--c-mendung-parah)",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                color: "var(--c-old-leaf-muted)",
-              }}
-            >
-              <span
-                className="h-2.5 w-2.5 rounded-md"
-                style={{
-                  backgroundColor: "var(--c-mendung-parah-light)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9)",
-                  border: "1px solid rgba(58, 141, 146, 0.35)",
-                }}
-              />
-              Disponible
-            </span>
-            <span
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm"
-              style={{
-                borderColor: "rgba(233, 114, 46, 0.35)",
-                backgroundColor: "rgba(255,255,255,0.8)",
-                color: "var(--c-old-leaf-muted)",
-              }}
-            >
-              <span
-                className="h-2.5 w-2.5 rounded-md border shadow-sm"
-                style={{
-                  backgroundColor: "var(--c-mendung)",
-                  borderColor: "var(--c-mendung-deep)",
-                }}
-              />
-              Reservado
-            </span>
-          </div>
         </section>
 
         <section
@@ -249,26 +242,46 @@ export default function RifaClient({ reservedList, names }: Props) {
                 <div
                   key={i}
                   className="flex aspect-square items-center justify-center rounded-xl text-[0.65rem] font-mono font-bold tabular-nums transition-transform duration-300 sm:text-sm"
-                  style={
-                    isReserved
-                      ? {
-                          backgroundColor: "var(--c-mendung)",
-                          color: "#fff",
-                          boxShadow: "0 4px 12px -4px rgba(200, 95, 30, 0.4)",
-                          border: "1px solid var(--c-mendung-deep)",
-                        }
-                      : {
-                          backgroundColor: "var(--c-mendung-parah-light)",
-                          color: "var(--c-kadestin)",
-                          border: "1px solid var(--c-kadestin-muted)",
-                        }
-                  }
+                  style={rifaNumberStyle(isReserved)}
                   aria-label={`Número ${pad2(i)}${isReserved ? ", reservado" : ", disponible"}`}
                 >
                   {pad2(i)}
                 </div>
               );
             })}
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-lg sm:text-sm">
+            <span
+              className="inline-flex items-center gap-2 px-3 py-1.5"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.8)",
+                color: "var(--c-old-leaf-muted)",
+              }}
+            >
+              <span
+                className="h-2.5 w-2.5 rounded-full"
+                style={{
+                  backgroundColor: "var(--c-kadestin)",
+                }}
+              />
+              Disponible
+            </span>
+            <span
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.8)",
+                color: "var(--c-old-leaf-muted)",
+              }}
+            >
+              <span
+                className="h-2.5 w-2.5 rounded-md"
+                style={{
+                  backgroundColor: "var(--c-mendung)",
+                }}
+              />
+              Reservado
+            </span>
           </div>
         </section>
 
@@ -281,29 +294,28 @@ export default function RifaClient({ reservedList, names }: Props) {
             style={{ backgroundColor: "var(--c-mendung-parah-faint)" }}
           >
             <ul className="grid grid-cols-1 gap-2.5 lg:grid-cols-3 lg:gap-x-4 lg:gap-y-2.5">
-              {names.map((name, i) => (
-                <li
-                  key={i}
-                  className="flex min-w-0 items-baseline gap-3 rounded-2xl border px-3.5 py-3 transition-shadow duration-300"
-                  style={{
-                    borderColor: "var(--c-mendung-parah)",
-                    backgroundColor: "rgba(255,255,255,0.82)",
-                    boxShadow: "0 4px 16px -10px rgba(30, 47, 61, 0.12)",
-                  }}
-                >
-                  <span
-                    className="flex h-8 w-9 shrink-0 items-center justify-center rounded-lg font-mono text-lg font-bold tabular-nums text-white shadow-sm"
-                    style={{ backgroundColor: "var(--c-kadestin)" }}
+              {names.map((name, i) => {
+                const isReserved = reserved.has(i);
+                return (
+                  <li
+                    key={i}
+                    className="flex min-w-0 items-baseline gap-3 rounded-2xl border px-3.5 py-3 transition-shadow duration-300"
+                    style={rifaListRowChrome(isReserved)}
                   >
-                    {pad2(i)}
-                  </span>
-                  <span
-                    className={`min-w-0 flex-1 text-md leading-snug ${name.trim() ? "font-bold text-[var(--c-old-leaf)]" : "italic text-[var(--c-old-leaf-muted)]/70"}`}
-                  >
-                    {name.trim() || "Sin asignar"}
-                  </span>
-                </li>
-              ))}
+                    <span
+                      className="flex h-8 w-9 shrink-0 items-center justify-center rounded-lg font-mono text-lg font-bold tabular-nums shadow-sm"
+                      style={rifaNumberStyle(isReserved)}
+                    >
+                      {pad2(i)}
+                    </span>
+                    <span
+                      className={`min-w-0 flex-1 text-md leading-snug ${name.trim() ? "font-bold text-[var(--c-old-leaf)]" : "italic text-[var(--c-old-leaf-muted)]/70"}`}
+                    >
+                      {name.trim() || "Sin asignar"}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </section>
