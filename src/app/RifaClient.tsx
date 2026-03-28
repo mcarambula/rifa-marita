@@ -323,7 +323,7 @@ export default function RifaClient({ reservedList, names }: Props) {
         <footer className="mt-14 text-center">
           <Divider />
           <p className="mt-4 text-lg text-[var(--c-old-leaf-muted)]">
-            Hecho con cariño · Rifa solidaria
+            Gracias por el apoyo.
           </p>
         </footer>
       </div>
