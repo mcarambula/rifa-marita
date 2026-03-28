@@ -354,21 +354,30 @@ export default function RifaClient({ reservedList, names }: Props) {
             </button>
           </div>
 
-          <div className="mx-auto grid max-w-md grid-cols-10 gap-1.5 sm:gap-2">
-            {gridIndices.map((i) => {
-              const isReserved = reserved.has(i);
-              return (
-                <div
-                  key={i}
-                  className="flex aspect-square items-center justify-center rounded-md text-[0.65rem] font-mono font-bold tabular-nums transition-transform duration-300 sm:text-sm"
-                  style={rifaNumberStyle(isReserved)}
-                  aria-label={`Número ${pad2(i)}${isReserved ? ", reservado" : ", disponible"}`}
-                >
-                  {pad2(i)}
-                </div>
-              );
-            })}
-          </div>
+          {gridFilter === "available" && gridIndices.length === 0 ? (
+            <p
+              className="mx-auto max-w-md px-2 py-8 text-center font-display text-lg font-semibold leading-snug text-(--c-old-leaf) sm:text-xl"
+              role="status"
+            >
+              ¡Son los mejores, gracias por tanto apoyo! ✨
+            </p>
+          ) : (
+            <div className="mx-auto grid max-w-md grid-cols-10 gap-1.5 sm:gap-2">
+              {gridIndices.map((i) => {
+                const isReserved = reserved.has(i);
+                return (
+                  <div
+                    key={i}
+                    className="flex aspect-square items-center justify-center rounded-md text-[0.65rem] font-mono font-bold tabular-nums transition-transform duration-300 sm:text-sm"
+                    style={rifaNumberStyle(isReserved)}
+                    aria-label={`Número ${pad2(i)}${isReserved ? ", reservado" : ", disponible"}`}
+                  >
+                    {pad2(i)}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         <section
