@@ -149,7 +149,7 @@ export default function RifaClient({ reservedList, names }: Props) {
               color: "var(--c-kadestin)",
             }}
           >
-            Rifa solidaria
+            Rifa solidaria JESSE & JOY
           </span>
           <h1 className="font-display mt-2 text-[2.35rem] font-semibold leading-tight tracking-tight text-(--c-old-leaf) sm:text-5xl sm:leading-tight">
             Tia Marita
@@ -176,7 +176,7 @@ export default function RifaClient({ reservedList, names }: Props) {
               <h2 className="font-display text-xl font-semibold text-(--c-old-leaf) sm:text-2xl">
                 Cuenta regresiva
               </h2>
-              <p className="text-sm text-(--c-old-leaf-muted)">
+              <p className="text-md text-(--c-old-leaf-muted)">
                 Sorteo el{" "}
                 <span
                   className="font-medium"
@@ -188,7 +188,14 @@ export default function RifaClient({ reservedList, names }: Props) {
                     month: "long",
                     year: "numeric",
                   })}
+                  .
                 </span>
+                <br />
+                <span>
+                  2 boletos para el concierto de Jesse & Joy - 11 de Abril.{" "}
+                </span>
+                <br />
+                <span>Teatro Anayansi.</span>
               </p>
             </div>
 
