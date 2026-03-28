@@ -91,15 +91,15 @@ function PaletteStrip({ className }: { className?: string }) {
 function Divider() {
   return (
     <div
-      className="mx-auto flex w-full max-w-[12rem] items-center gap-3 py-1"
+      className="mx-auto flex w-full max-w-48 items-center gap-3 py-1"
       aria-hidden
     >
-      <span className="h-px flex-1 bg-[var(--c-mendung-parah)]" />
+      <span className="h-px flex-1 bg-(--c-mendung-parah)" />
       <span
         className="inline-block h-1.5 w-1.5 rotate-45 rounded-sm"
         style={{ backgroundColor: "var(--c-maroona)" }}
       />
-      <span className="h-px flex-1 bg-[var(--c-mendung-parah)]" />
+      <span className="h-px flex-1 bg-(--c-mendung-parah)" />
     </div>
   );
 }
@@ -109,9 +109,12 @@ type Props = {
   names: string[];
 };
 
+type GridFilter = "all" | "available" | "reserved";
+
 export default function RifaClient({ reservedList, names }: Props) {
   const reserved = new Set(reservedList);
   const [now, setNow] = useState<number | null>(null);
+  const [gridFilter, setGridFilter] = useState<GridFilter>("all");
 
   useEffect(() => {
     const tick = () => setNow(Date.now());
@@ -124,8 +127,18 @@ export default function RifaClient({ reservedList, names }: Props) {
   const remaining =
     now === null ? null : formatRemaining(deadline.getTime() - now);
 
+  const gridIndices = Array.from({ length: 100 }, (_, i) => i).filter((i) => {
+    if (gridFilter === "all") return true;
+    const isReserved = reserved.has(i);
+    return gridFilter === "reserved" ? isReserved : !isReserved;
+  });
+
+  function toggleGridFilter(next: Exclude<GridFilter, "all">) {
+    setGridFilter((f) => (f === next ? "all" : next));
+  }
+
   return (
-    <div className="relative min-h-screen overflow-hidden text-[var(--foreground)]">
+    <div className="relative min-h-screen overflow-hidden text-foreground">
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
         <header className="mb-12 text-center sm:mb-14">
           <span
@@ -138,11 +151,11 @@ export default function RifaClient({ reservedList, names }: Props) {
           >
             Rifa solidaria
           </span>
-          <h1 className="font-display mt-2 text-[2.35rem] font-semibold leading-tight tracking-tight text-[var(--c-old-leaf)] sm:text-5xl sm:leading-tight">
+          <h1 className="font-display mt-2 text-[2.35rem] font-semibold leading-tight tracking-tight text-(--c-old-leaf) sm:text-5xl sm:leading-tight">
             Tia Marita
           </h1>
           <Divider />
-          <p className="mx-auto mt-4 max-w-lg text-lg leading-relaxed text-[var(--c-old-leaf-muted)]">
+          <p className="mx-auto mt-4 max-w-lg text-lg leading-relaxed text-(--c-old-leaf-muted)">
             Gracias por sumarte. Cada número es un abrazo de apoyo.
           </p>
         </header>
@@ -160,10 +173,10 @@ export default function RifaClient({ reservedList, names }: Props) {
             style={{ backgroundColor: "var(--c-mendung-parah-light)" }}
           >
             <div className="mb-6 flex flex-col items-center gap-1 text-center">
-              <h2 className="font-display text-xl font-semibold text-[var(--c-old-leaf)] sm:text-2xl">
+              <h2 className="font-display text-xl font-semibold text-(--c-old-leaf) sm:text-2xl">
                 Cuenta regresiva
               </h2>
-              <p className="text-sm text-[var(--c-old-leaf-muted)]">
+              <p className="text-sm text-(--c-old-leaf-muted)">
                 Sorteo el{" "}
                 <span
                   className="font-medium"
@@ -256,21 +269,86 @@ export default function RifaClient({ reservedList, names }: Props) {
         </section>
 
         <section className="mb-6 text-center">
-          <h2 className="font-display text-lg font-semibold text-[var(--c-old-leaf)] sm:text-xl">
+          <h2 className="font-display text-lg font-semibold text-(--c-old-leaf) sm:text-xl">
             Números
           </h2>
         </section>
 
         <section
-          aria-label="Números del 00 al 99"
+          aria-label={
+            gridFilter === "all"
+              ? "Números del 00 al 99"
+              : gridFilter === "available"
+                ? "Números disponibles"
+                : "Números reservados"
+          }
           className="mx-auto mb-14 rounded-3xl border p-4 shadow-[0_16px_40px_-22px_rgba(30,47,61,0.2)] backdrop-blur-sm sm:max-w-lg sm:p-5"
           style={{
             borderColor: "rgba(58, 141, 146, 0.25)",
             backgroundColor: "rgba(255,255,255,0.55)",
           }}
         >
+          <div
+            className="mb-4 flex flex-wrap items-center justify-center gap-3 text-lg sm:text-sm"
+            role="group"
+            aria-label="Filtrar por estado"
+          >
+            <button
+              type="button"
+              aria-pressed={gridFilter === "available"}
+              onClick={() => toggleGridFilter("available")}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 shadow-sm transition-[box-shadow,transform] outline-none hover:brightness-[0.98] focus-visible:ring-2 focus-visible:ring-(--c-kadestin) focus-visible:ring-offset-2 active:scale-[0.98]"
+              style={{
+                backgroundColor:
+                  gridFilter === "available"
+                    ? "var(--c-mendung-parah-light)"
+                    : "rgba(255,255,255,0.8)",
+                color: "var(--c-old-leaf-muted)",
+                boxShadow:
+                  gridFilter === "available"
+                    ? "0 0 0 2px var(--c-kadestin-muted)"
+                    : undefined,
+              }}
+            >
+              <span
+                className="h-2.5 w-2.5 shrink-0 rounded-md"
+                style={{
+                  backgroundColor: "var(--c-mendung-parah-light)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9)",
+                  border: "1px solid var(--c-kadestin-muted)",
+                }}
+              />
+              Disponible
+            </button>
+            <button
+              type="button"
+              aria-pressed={gridFilter === "reserved"}
+              onClick={() => toggleGridFilter("reserved")}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 shadow-sm transition-[box-shadow,transform] outline-none hover:brightness-[0.98] focus-visible:ring-2 focus-visible:ring-(--c-mendung) focus-visible:ring-offset-2 active:scale-[0.98]"
+              style={{
+                backgroundColor:
+                  gridFilter === "reserved"
+                    ? "rgba(233, 114, 46, 0.12)"
+                    : "rgba(255,255,255,0.8)",
+                color: "var(--c-old-leaf-muted)",
+                boxShadow:
+                  gridFilter === "reserved"
+                    ? "0 0 0 2px var(--c-mendung-deep)"
+                    : undefined,
+              }}
+            >
+              <span
+                className="h-2.5 w-2.5 shrink-0 rounded-md shadow-sm"
+                style={{
+                  backgroundColor: "var(--c-mendung)",
+                }}
+              />
+              Reservado
+            </button>
+          </div>
+
           <div className="mx-auto grid max-w-md grid-cols-10 gap-1.5 sm:gap-2">
-            {Array.from({ length: 100 }, (_, i) => {
+            {gridIndices.map((i) => {
               const isReserved = reserved.has(i);
               return (
                 <div
@@ -283,39 +361,6 @@ export default function RifaClient({ reservedList, names }: Props) {
                 </div>
               );
             })}
-          </div>
-
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-lg sm:text-sm">
-            <span
-              className="inline-flex items-center gap-2 px-3 py-1.5"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.8)",
-                color: "var(--c-old-leaf-muted)",
-              }}
-            >
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{
-                  backgroundColor: "var(--c-kadestin)",
-                }}
-              />
-              Disponible
-            </span>
-            <span
-              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.8)",
-                color: "var(--c-old-leaf-muted)",
-              }}
-            >
-              <span
-                className="h-2.5 w-2.5 rounded-md"
-                style={{
-                  backgroundColor: "var(--c-mendung)",
-                }}
-              />
-              Reservado
-            </span>
           </div>
         </section>
 
@@ -343,7 +388,7 @@ export default function RifaClient({ reservedList, names }: Props) {
                       {pad2(i)}
                     </span>
                     <span
-                      className={`min-w-0 flex-1 text-md leading-snug ${name.trim() ? "font-bold text-[var(--c-old-leaf)]" : "italic text-[var(--c-old-leaf-muted)]/70"}`}
+                      className={`min-w-0 flex-1 text-md leading-snug ${name.trim() ? "font-bold text-(--c-old-leaf)" : "italic text-(--c-old-leaf-muted)/70"}`}
                     >
                       {name.trim() || "Sin asignar"}
                     </span>
@@ -356,7 +401,7 @@ export default function RifaClient({ reservedList, names }: Props) {
 
         <footer className="mt-14 text-center">
           <Divider />
-          <p className="mt-4 text-lg text-[var(--c-old-leaf-muted)]">
+          <p className="mt-4 text-lg text-(--c-old-leaf-muted)">
             Gracias por el apoyo.
           </p>
         </footer>
