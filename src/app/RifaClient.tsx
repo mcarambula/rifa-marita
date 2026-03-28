@@ -192,14 +192,14 @@ export default function RifaClient({ reservedList, names }: Props) {
                 ].map((u) => (
                   <div
                     key={u.label}
-                    className="group relative overflow-hidden rounded-2xl border px-2 py-4 text-center shadow-[0_4px_20px_-8px_rgba(30,47,61,0.12)] sm:px-3 sm:py-5"
+                    className="group relative overflow-hidden border px-2 py-4 text-center shadow-[0_4px_20px_-8px_rgba(30,47,61,0.12)] sm:px-3 sm:py-5"
                     style={{
                       borderColor: "rgba(58, 141, 146, 0.4)",
                       backgroundColor: "rgba(255,255,255,0.88)",
                     }}
                   >
                     <div
-                      className="absolute inset-x-0 top-0 h-1.5 rounded-t-[0.65rem] opacity-100"
+                      className="absolute inset-x-0 top-0 h-1.5  opacity-100"
                       style={{ backgroundColor: "var(--c-kadestin)" }}
                     />
                     <div
@@ -241,7 +241,7 @@ export default function RifaClient({ reservedList, names }: Props) {
               return (
                 <div
                   key={i}
-                  className="flex aspect-square items-center justify-center rounded-xl text-[0.65rem] font-mono font-bold tabular-nums transition-transform duration-300 sm:text-sm"
+                  className="flex aspect-square items-center justify-center rounded-md text-[0.65rem] font-mono font-bold tabular-nums transition-transform duration-300 sm:text-sm"
                   style={rifaNumberStyle(isReserved)}
                   aria-label={`Número ${pad2(i)}${isReserved ? ", reservado" : ", disponible"}`}
                 >
